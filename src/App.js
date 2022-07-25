@@ -1,24 +1,29 @@
 import "./App.css";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import Basket from "./components/basket";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Header from "./components/header";
 import Products from "./components/productsFront";
 import productsService from "./services/products";
 
 function App() {
-  const [products, setProducts] = useState([]);
   const [basket, setBasket] = useState([]);
-  const [productSearch, setProductSearch] = useState("");
+  const ref = useRef("def");
+  const [products, setProducts] = useState([]);
   const [searchItem, setSearchItem] = useState("");
+  const [basketView, setBasketView] = useState(false);
+  var [total, setTotal] = useState(0);
+
+  //Searching all the products with a service.
   useEffect(() => {
     productsService.getAll().then((data) => {
       setProducts(data.products);
       console.log(products);
     });
   }, []);
-
+  //Search Function, emptying the last search and getting the needed products
   const search = (e) => {
     e.preventDefault();
     setProducts([]);
@@ -26,15 +31,39 @@ function App() {
       setProducts(data.products);
     });
   };
+  //Making a basket, and adding the total price.
   const basketfunction = (item) => {
-    setBasket([...basket, item]);
+    const basketTotal = basket.reduce((prev, next) => prev + next.price, 0);
+    var tempTotal = total++ + basketTotal;
+    setTotal(tempTotal);
+    console.log(tempTotal);
     console.log(basket);
+    setBasket((basketItems) => [...basketItems, item]);
+    //it's async(?) so it updates it oddly to the total. Total in header updates fine, but everything else seems off
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+  }, []);
+  const handleClickOutside = (e) => {
+    if (!ref?.current?.contains(e.target)) {
+      setBasketView(false);
+    }
   };
 
   return (
     <div className="p-2">
-      <Header total={basket} />
+      <Header
+        total={total}
+        updateBasketView={setBasketView}
+        basketView={basketView}
+      />
+
       <div>
+        <div ref={ref}>
+          <Basket basketView={basketView} basketItems={basket} />
+        </div>
+
         <form onSubmit={search}>
           <label
             for="default-search"
@@ -79,7 +108,14 @@ function App() {
         </form>
 
         <h1>Search</h1>
-        <Products product={products} basket={basketfunction} />
+        <Products
+          product={products}
+          basket={basketfunction}
+          isBasketView={basketView}
+        />
+      </div>
+      <div>
+        <p>{basket.price}</p>
       </div>
     </div>
   );

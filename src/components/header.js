@@ -1,14 +1,7 @@
 const Header = (props) => {
-  const totalPriceItems = [];
-  var sum = totalPriceItems.reduce(function (a, b) {
-    return a + b;
-  }, 0);
-
-  props.total.map((item) => {
-    totalPriceItems.push(item.price);
-  });
-  console.log(sum);
-  console.log(totalPriceItems);
+  const handleView = () => {
+    props.updateBasketView(!props.basketView);
+  };
 
   return (
     <div className="p-4 flex">
@@ -17,8 +10,10 @@ const Header = (props) => {
       </div>
 
       <div class="basis-1/4">02</div>
-      <div class="basis-1/2">03</div>
-      <div>{sum}</div>
+      <div class="basis-1/4">03</div>
+      <div class="basis-1/4" onClick={handleView}>
+        <p>Total: {props.total}</p>
+      </div>
     </div>
   );
 };
