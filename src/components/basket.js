@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
 const Basket = (props) => {
   const basket = props.basketItems;
   console.log(basket);
@@ -26,6 +29,11 @@ const Basket = (props) => {
             </div>
           ))}
         </div>
+        <FontAwesomeIcon
+          className="z-20"
+          icon={faXmark}
+          onClick={() => props.setBasketView(!props.basketView)}
+        />
       </div>
     </div>
   );
