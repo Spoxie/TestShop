@@ -13,7 +13,6 @@ import productsService from "./services/products";
 
 function App() {
   const [basket, setBasket] = useState([]);
-
   const [products, setProducts] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [basketView, setBasketView] = useState(false);
@@ -36,8 +35,7 @@ function App() {
   };
   //Making a basket, and adding the total price.
   const basketfunction = (item) => {
-    const basketTotal = basket.reduce((prev, next) => prev + next.price, 0);
-    var tempTotal = total++ + basketTotal;
+    var tempTotal = total++ + item.price;
     setTotal(tempTotal);
     console.log(tempTotal);
     console.log(basket);
@@ -65,23 +63,28 @@ function App() {
       <Basket
         basketView={basketView}
         basketItems={basket}
+        total={total}
+        setTotal={setTotal}
+        setBasketItems={setBasket}
         setBasketView={setBasketView}
       />
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Products
-                product={products}
-                basket={basketfunction}
-                isBasketView={basketView}
-              />
-            }
-          />
-          <Route path="/delivery" element={<Delivery />} />
-        </Routes>
-      </Router>
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Products
+              product={products}
+              basket={basketfunction}
+              isBasketView={basketView}
+            />
+          }
+        />
+        <Route
+          path="/delivery"
+          element={<Delivery total={total} basket={basket} />}
+        />
+      </Routes>
     </div>
   );
 }

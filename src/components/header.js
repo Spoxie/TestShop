@@ -1,11 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 const Header = (props) => {
   const handleView = () => {
     props.updateBasketView(!props.basketView);
   };
+  const navigate = useNavigate();
 
   return (
     <div className="p-4 flex">
-      <div class="basis-1/4">
+      <div class="basis-1/4" onClick={() => navigate("/")}>
         <h1>logo</h1>
       </div>
 

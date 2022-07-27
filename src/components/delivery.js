@@ -1,8 +1,5 @@
 const Delivery = (props) => {
-  return (
-    <div>
-      <h1>Hello Delivery!</h1>
-    </div>
-  );
+  console.log(props.basket);
+  return <div>{props.total}</div>;
 };
 export default Delivery;
